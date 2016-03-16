@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:id="@+id/fragment_terrain_rl_parent"
+    style="@style/List.Header"
+    android:layout_width="wrap_content"
+    android:layout_height="match_parent"
+    android:background="@android:color/white"
+    android:orientation="vertical"
+    android:weightSum="5" >
+
+    <LinearLayout
+        android:id="@+id/fragment_points_ll_header"
+        android:layout_width="match_parent"
+        android:layout_height="65dp"
+        android:gravity="center"
+        android:orientation="horizontal" >
+
+        <ImageButton
+            android:id="@+id/frag_devices_ib_title"
+            android:layout_width="wrap_content"
+            android:layout_height="match_parent"
+            android:background="@android:color/transparent"
+            android:clickable="true"
+            android:paddingBottom="20dp"
+            android:paddingLeft="30dp"
+            android:paddingRight="30dp"
+            android:paddingTop="20dp"
+            android:src="@drawable/ic_devices_" />
+
+        <TextView
+            android:id="@+id/frag_devices_tv_title"
+            style="@style/List.Header.TextView"
+            android:layout_width="wrap_content"
+            android:layout_height="fill_parent"
+            android:layout_gravity="center"
+            android:gravity="center"
+            android:text="@string/list_of_devices" />
+    </LinearLayout>
+
+    <View
+        android:id="@+id/frag_devices_divider_title"
+        style="@style/List.Header.Divider"
+        android:layout_width="fill_parent" >
+    </View>
+
+    <LinearLayout
+        android:id="@+id/frag_devices_ll_listparent"
+        android:layout_width="match_parent"
+        android:layout_height="fill_parent"
+        android:layout_marginTop="10dp" >
+
+        <ListView
+            android:id="@+id/frag_devices_listview"
+            style="@style/List.listview"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:cacheColorHint="@android:color/transparent"
+            android:listSelector="@drawable/list_selector_color" >
+        </ListView>
+    </LinearLayout>
+
+</LinearLayout>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?><LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    style="@style/List.listview"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:orientation="horizontal"
+    android:padding="5dp"
+    android:weightSum="1" >
+
+    <ImageView
+        android:id="@+id/frag_list_item_img_device_image"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_weight="0"
+        android:src="@drawable/ic_launcher"
+        android:visibility="gone"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        android:padding="5dp" >
+
+        <TextView
+            android:id="@+id/list_item_tv_device_name"
+            style="@style/List.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:singleLine="true"
+            android:text="name" />
+
+        <TextView
+            android:id="@+id/list_item_tv_device_type"
+            style="@style/List.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:singleLine="true"
+            android:text="Type" />
+
+        <TextView
+            android:id="@+id/list_item_tv_device_model"
+            style="@style/List.Text"
+            android:layout_width="wrap_content"
+            android:layout_height="0dp"
+            android:layout_weight="7"
+            android:singleLine="true"
+            android:text="model" />
+    </LinearLayout>
+
+
+</LinearLayout>
