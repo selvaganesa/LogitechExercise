@@ -54,12 +54,9 @@ public class DeviceJsonReader implements Runnable {
 		InputStream inStream = null;
 		List<Device> devices = null;
 		try {
-			// inStream = getDevicesFromServer(urlString);
-			// InputStream inStream = null;
 			URL url = new URL(urlString);
 			httpUrlConnection = (HttpURLConnection) url.openConnection();
 			inStream = new BufferedInputStream(httpUrlConnection.getInputStream());
-
 		} catch (HttpRetryException e) {
 			isSuccess = false;
 			errorType = ERROR_HTTP_CONNECT;
@@ -112,25 +109,6 @@ public class DeviceJsonReader implements Runnable {
 			mCallback.errorDisplay(errorType, errorMsg, handler);
 
 	}
-
-	/**
-	 * Connect to that given URL and return Input stream
-	 * 
-	 * @return
-	 */
-	private InputStream getDevicesFromServer(String urlString) throws HttpRetryException, IOException, Exception {
-		HttpURLConnection httpUrlConnection = null;
-		InputStream inStream = null;
-		try {
-			URL url = new URL(urlString);
-			httpUrlConnection = (HttpURLConnection) url.openConnection();
-			inStream = new BufferedInputStream(httpUrlConnection.getInputStream());
-		} finally {
-			// httpUrlConnection.disconnect();
-		}
-		return inStream;
-	}
-
 	/**
 	 * 
 	 * @return

@@ -47,14 +47,12 @@ import android.widget.TextView;
 
 public class CustomCircularProgressDialog extends Dialog {
 
-    // private int mTitle = -1;
     private String mStringTitle = null;
     TextView mDetailMessage = null;
     private ProgressBar mProgressBar;
 
     public CustomCircularProgressDialog(Activity activity, int title) {
         super(activity);
-        // mTitle = title;
     }
 
     public CustomCircularProgressDialog(Activity activity, String title) {
