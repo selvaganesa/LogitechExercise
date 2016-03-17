@@ -121,30 +121,28 @@ public final class DeviceDatabaseWrapper implements IDeviceDatabaseInterface {
 	@Override
 	public boolean inserDevices(List<Device> devices) {
 		boolean isSuccess = false;
-		String query = "INSERT or REPLACE INTO "
-                + DeviceDatabaseOpenHelper.TABLE_NAME
-                + " ("
-                + DeviceDatabaseOpenHelper.NAME + ", "
-                + DeviceDatabaseOpenHelper.TYPE + ", "
-                + DeviceDatabaseOpenHelper.MODEL
-                + ") values (?,?,?);";
-        mDeviceDatabase.beginTransaction();
-        SQLiteStatement statement = mDeviceDatabase.compileStatement(query);
-        try {
-        	for (Device device : devices) {
-        		   statement.bindString(1, device.getName());
-                   statement.bindString(2, device.getType());
-                   statement.bindString(3, device.getModel());
-                   statement.executeInsert();
+		if (devices != null && devices.size() > 0) {
+			String query = "INSERT or REPLACE INTO " + DeviceDatabaseOpenHelper.TABLE_NAME + " ("
+					+ DeviceDatabaseOpenHelper.NAME + ", " + DeviceDatabaseOpenHelper.TYPE + ", "
+					+ DeviceDatabaseOpenHelper.MODEL + ") values (?,?,?);";
+			mDeviceDatabase.beginTransaction();
+			SQLiteStatement statement = mDeviceDatabase.compileStatement(query);
+			try {
+				for (Device device : devices) {
+					statement.bindString(1, device.getName());
+					statement.bindString(2, device.getType());
+					statement.bindString(3, device.getModel());
+					statement.executeInsert();
+				}
+				if (statement != null)
+					statement.close();
+				mDeviceDatabase.setTransactionSuccessful();
+				mDeviceDatabase.endTransaction();
+				isSuccess = true;
+			} catch (Exception e) {
+				e.printStackTrace();
 			}
-            if (statement != null)
-                statement.close();
-            mDeviceDatabase.setTransactionSuccessful();
-            mDeviceDatabase.endTransaction();
-            isSuccess = true;
-        } catch(Exception e) {
-            e.printStackTrace();
-        }
+		}
 		return isSuccess;
 	}
 

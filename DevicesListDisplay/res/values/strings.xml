@@ -9,4 +9,5 @@
     <string name="device_model_with_colon">Device Model : </string>
     <string name="no_internet_connection"> There is no internet connection. Please verify internet connecton and retry. \n WARNING : Current list items are retrieved from local database (not sync with server)</string>
 	<string name="empty_devices">Device list are empty! Please again..</string>
+	<string name="loading_devices">Loading devices..</string>
 </resources>

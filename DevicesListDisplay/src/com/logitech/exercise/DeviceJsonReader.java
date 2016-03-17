@@ -32,6 +32,7 @@ public class DeviceJsonReader implements Runnable {
 	public static int ERROR_HTTP_CONNECT = 0;
 	public static int ERROR_JSON_PARSE = 1;
 	public static int ERROR_TODO = 2;
+
 	/**
 	 * 
 	 * @param url
@@ -49,10 +50,16 @@ public class DeviceJsonReader implements Runnable {
 		boolean isSuccess = true;
 		int errorType = ERROR_HTTP_CONNECT;
 		String errorMsg = "";
+		HttpURLConnection httpUrlConnection = null;
 		InputStream inStream = null;
 		List<Device> devices = null;
 		try {
-			inStream = getDevicesFromServer(urlString);
+			// inStream = getDevicesFromServer(urlString);
+			// InputStream inStream = null;
+			URL url = new URL(urlString);
+			httpUrlConnection = (HttpURLConnection) url.openConnection();
+			inStream = new BufferedInputStream(httpUrlConnection.getInputStream());
+
 		} catch (HttpRetryException e) {
 			isSuccess = false;
 			errorType = ERROR_HTTP_CONNECT;
@@ -89,6 +96,16 @@ public class DeviceJsonReader implements Runnable {
 				e.printStackTrace();
 			}
 
+		if (httpUrlConnection != null)
+			httpUrlConnection.disconnect();
+
+		try {
+			if (inStream != null)
+				inStream.close();
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+
 		if (isSuccess)
 			mCallback.parsedDeviceList(devices, handler);
 		else
@@ -98,6 +115,7 @@ public class DeviceJsonReader implements Runnable {
 
 	/**
 	 * Connect to that given URL and return Input stream
+	 * 
 	 * @return
 	 */
 	private InputStream getDevicesFromServer(String urlString) throws HttpRetryException, IOException, Exception {
@@ -108,7 +126,7 @@ public class DeviceJsonReader implements Runnable {
 			httpUrlConnection = (HttpURLConnection) url.openConnection();
 			inStream = new BufferedInputStream(httpUrlConnection.getInputStream());
 		} finally {
-			httpUrlConnection.disconnect();
+			// httpUrlConnection.disconnect();
 		}
 		return inStream;
 	}
@@ -135,6 +153,7 @@ public class DeviceJsonReader implements Runnable {
 				}
 			}
 			jsonReader.endObject();
+			// inStream.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

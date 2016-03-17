@@ -10,6 +10,7 @@ import com.logitech.exercise.common.Constants;
 import com.logitech.exercise.common.Utils;
 import com.logitech.exercise.database.Device;
 import com.logitech.exercise.devices.R;
+import com.logitech.exercise.devices.ui.fragments.CustomCircularProgressDialog;
 import com.logitech.exercise.devices.ui.fragments.DeviceListFragment;
 import com.logitech.exercise.devices.ui.fragments.DeviceListFragment.IDeviceListCallbacks;
 
@@ -46,6 +47,7 @@ public class DeviceListActivity extends Activity implements IDeviceListCallbacks
 		// If savedInstanceState null then it is fresh start
 		if (savedInstanceState == null) {
 			if (Utils.isInternetAvailable(this)) {
+				showCustomProgressDialog(getString(R.string.loading_devices));
 				if (isHandlerCallbackMethod)
 					mDeviceManager.syncDevices(localHandler);
 				else
@@ -103,26 +105,9 @@ public class DeviceListActivity extends Activity implements IDeviceListCallbacks
 			mToast.cancel();
 			mToast = null;
 		}
-		mToast = Toast.makeText(this, msg, Toast.LENGTH_SHORT);
+		mToast = Toast.makeText(this, msg, Toast.LENGTH_LONG);
 		mToast.show();
 	}
-
-	/**
-	 * Sync Broadcast receiver
-	 */
-	protected BroadcastReceiver localMessenger = new LocalMessageReceiver() {
-		public void onReceive(Context arg0, Intent intent) {
-			Log.d(TAG, "localMessenger info of broadcast DLA");
-			if (intent != null) {
-				int status = intent.getIntExtra(DeviceJsonReader.STATUS, -1);
-				if (status == DeviceJsonReader.DEVICE_PASRSING_DONE) {
-					updateList();
-				} else {
-					showToast(intent.getStringExtra(DeviceJsonReader.ERROR_MESSAGE));
-				}
-			}
-		}
-	};
 
 	/**
 	 *
@@ -137,15 +122,42 @@ public class DeviceListActivity extends Activity implements IDeviceListCallbacks
 			switch (msg.what) {
 			case DeviceJsonReader.DEVICE_PASRSING_DONE:
 				updateList();
+				cancelCustomProgressDialog();
 				break;
 			case DeviceJsonReader.DEVICE_PASRSING_ERROR:
 				showToast((String) msg.obj);
+				cancelCustomProgressDialog();
 				break;
 			default:
 				break;
 			}
 		}
 	}
+
+	@Override
+	protected void onPause() {
+		cancelCustomProgressDialog();
+		super.onPause();
+	}
+
+	/**
+	 * Sync Broadcast receiver
+	 */
+	protected BroadcastReceiver localMessenger = new LocalMessageReceiver() {
+		public void onReceive(Context arg0, Intent intent) {
+			Log.d(TAG, "localMessenger info of broadcast DLA");
+			if (intent != null) {
+				int status = intent.getIntExtra(DeviceJsonReader.STATUS, -1);
+				if (status == DeviceJsonReader.DEVICE_PASRSING_DONE) {
+					updateList();
+					cancelCustomProgressDialog();
+				} else {
+					showToast(intent.getStringExtra(DeviceJsonReader.ERROR_MESSAGE));
+					cancelCustomProgressDialog();
+				}
+			}
+		}
+	};
 
 	/**
 	 * 
@@ -190,4 +202,32 @@ public class DeviceListActivity extends Activity implements IDeviceListCallbacks
 	public void onDeviceLongPressed(Device device) {
 		// TODO Auto-generated method stub
 	}
+
+	private CustomCircularProgressDialog customProgressDialog = null;
+
+	/**
+	 * Show the progress dialog
+	 *
+	 * @param stMsg
+	 */
+	public void showCustomProgressDialog(final String stMsg) {
+		if (customProgressDialog == null) {
+			customProgressDialog = new CustomCircularProgressDialog(this, stMsg);
+		}
+		customProgressDialog.setMessage(stMsg);
+		customProgressDialog.setCancelable(false);
+		customProgressDialog.show();
+
+	}
+
+	/**
+	 * 
+	 */
+	public void cancelCustomProgressDialog() {
+		if (customProgressDialog != null && customProgressDialog.isShowing()) {
+			customProgressDialog.dismiss();
+			customProgressDialog = null;
+		}
+	}
+
 }
